@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import axios from 'axios';
+import { useEffect, useState } from 'react'
 import Form from '../components/form.component'
 import Location from '../components/location.component'
 import Weather from '../components/weather.component'
@@ -8,19 +9,27 @@ import styles from '../styles/Home.module.css'
 
 export default function Home() {
 
-  const [trafficData, setTrafficData] = useState({location: "Bedok"});
+  const [trafficData, setTrafficData] = useState([]);
+  const [weatherData, setWeatherData] = useState(null);
   const [dateTime, setDateTime] = useState('');
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
-
-  const formResults = (formResults) => {
-    setDateTime(formResults);
-  }
 
   const settingScreenShot = (ss) => {
     setSS(ss)
   }
 
+  useEffect(() => {
+    if (dateTime.length !== 0) {
+      axios.get('https://api.data.gov.sg/v1/transport/traffic-images?date_time=' + dateTime)
+      .then(response => {
+        setTrafficData(response.data.items[0].cameras);
+      })
+      .catch(error => {
+        alert("Please alert the administrator for the following error:" + error.message) // failed to enter dateTime value
+      })
+    }
+  }, [dateTime])
 
   return (
     <div className={styles.container}>
@@ -40,7 +49,7 @@ export default function Home() {
           <code className={styles.code}>pages/index.js</code>
         </p>
 
-        <Form formResults={formResults} />
+        <Form setDateTime={setDateTime} />
 
         {/* Grid */}
         <div className={styles.grid}>
