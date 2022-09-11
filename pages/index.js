@@ -59,7 +59,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Screenshot ss={ss} />
+        <Screenshot dateTime={dateTime} ss={ss} />
         
       </main>
     </div>
