@@ -15,10 +15,6 @@ export default function Home() {
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
 
-  const settingScreenShot = (ss) => {
-    setSS(ss)
-  }
-
   useEffect(() => {
     if (dateTime.length !== 0) {
       axios.get('https://api.data.gov.sg/v1/transport/traffic-images?date_time=' + dateTime)
@@ -55,7 +51,7 @@ export default function Home() {
         <div className={styles.grid}>
           <div className={`${styles.card} ${styles.location}`}>
             <h2>Location &darr;</h2>
-            <Location dateTime={dateTime} settingScreenShot={settingScreenShot} trafficData={trafficData} setGeolocation={setGeolocation} />
+            <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} />
           </div>
           <div className={`${styles.card} ${styles.weather}`}>
             <h2>Weather &darr;</h2>
