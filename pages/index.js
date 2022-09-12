@@ -10,20 +10,37 @@ import styles from '../styles/Home.module.css'
 export default function Home() {
 
   const [trafficData, setTrafficData] = useState([]);
-  const [weatherData, setWeatherData] = useState(null);
+  const [forecastData, setForecastData] = useState([]);
+  const [areaData, setAreaData] = useState([]);
   const [dateTime, setDateTime] = useState('');
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
 
   useEffect(() => {
     if (dateTime.length !== 0) {
+      let errors = []
       axios.get('https://api.data.gov.sg/v1/transport/traffic-images?date_time=' + dateTime)
       .then(response => {
         setTrafficData(response.data.items[0].cameras);
       })
       .catch(error => {
-        alert("Please alert the administrator for the following error:" + error.message) // failed to enter dateTime value
+        errors.push(error.message);
       })
+
+      axios.get('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast?date_time=' + dateTime)
+      .then(response => {
+        setAreaData(response.data.area_metadata);
+        setForecastData(response.data.items[0].forecasts);
+      })
+      .catch(error => {
+        errors.push(error.message);
+      })
+
+      if (errors.length !== 0) {
+        // failed to enter dateTime value
+        // or API call failed
+        alert("Please alert the administrator for the following error:" + errors.join(' and '))
+      }
     }
   }, [dateTime])
 
@@ -55,7 +72,7 @@ export default function Home() {
           </div>
           <div className={`${styles.card} ${styles.weather}`}>
             <h2>Weather &darr;</h2>
-            <Weather dateTime={dateTime} geolocation={geolocation} />
+            <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} />
           </div>
         </div>
 

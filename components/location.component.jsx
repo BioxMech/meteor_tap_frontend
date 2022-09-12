@@ -19,7 +19,6 @@ const Location = ({ setSS, trafficData, setGeolocation }) => {
   };
 
   const loadMore = async () => {
-    console.log("LOADING MORE")
     const result  = await trafficData.slice(startIndex, stopIndex).reduce((prev, curr) => {
       return prev
         .then((acc) => 
@@ -45,7 +44,6 @@ const Location = ({ setSS, trafficData, setGeolocation }) => {
   }
 
   useEffect(() => {
-    console.log("location component")
     setStartIndex(0);
     setStopIndex(3);
     if (trafficData.length !== 0) { loadMore(); }
