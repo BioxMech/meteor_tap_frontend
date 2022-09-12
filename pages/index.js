@@ -6,6 +6,7 @@ import Location from '../components/location.component'
 import Weather from '../components/weather.component'
 import Screenshot from '../components/screenshot.component'
 import styles from '../styles/Home.module.css'
+import Grid from '@mui/material/Grid';
 
 export default function Home() {
 
@@ -17,6 +18,7 @@ export default function Home() {
   const [dateTime, setDateTime] = useState('');
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   useEffect(() => {
     if (dateTime.length !== 0) {
@@ -72,30 +74,20 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to Meteor! (by <a href="https://www.mom.gov.sg/">MoM</a>)
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          <code className={styles.code}>Developed by Jason</code>
         </p>
 
-        <Form setDateTime={setDateTime} />
-
-        {/* Grid */}
-        <div className={styles.grid}>
-          <div className={`${styles.card} ${styles.location}`}>
-            <h2>Location &darr;</h2>
-            <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} />
-          </div>
-          <div className={`${styles.card} ${styles.weather}`}>
-            <h2>Weather Forecast &darr;</h2>
-            <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
-          </div>
-        </div>
-
-        <Screenshot dateTime={dateTime} ss={ss} />
+        <Form setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} />
         
+        <Grid container spacing={2}>
+          <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />
+          <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
+          <Screenshot dateTime={dateTime} ss={ss} />
+        </Grid>
       </main>
     </div>
   )
