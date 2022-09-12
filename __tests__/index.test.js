@@ -30,7 +30,9 @@ describe("Main Page", () => {
 
   it("Form Component", () => {
     const setDateTime = jest.fn()
-    render(<Form setDateTime={setDateTime} />);
+    const loadingButton = false;
+    const setLoadingButton = jest.fn();
+    render(<Form setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} />);
 
     // check if adds properly
     const dateInput = screen.getByTestId("date");
@@ -43,6 +45,7 @@ describe("Main Page", () => {
     fireEvent.click(viewButton);
 
     expect(setDateTime).toHaveBeenCalled();
+    expect(setLoadingButton).toHaveBeenCalled();
   })
 
   it("Location Component", async () => {
@@ -65,17 +68,12 @@ describe("Main Page", () => {
           longitude: 103.851316802547
         },
       }
-    ]
+    ];
+    const setLoadingButton = jest.fn();
     
-    render(<Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} />);
+    render(<Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />);
 
-    expect(screen.getByTestId("list")).toBeInTheDocument();
-    expect(screen.getByTestId("location-footer")).toBeInTheDocument();
-    expect(screen.getByTestId("location-footer")).toHaveTextContent("Loading...");
-    
-    // await waitFor(() => {
-    //   expect(screen.getByText("STRAITS BOULEVARD")).toBeInTheDocument();
-    // });
+    expect(screen.getByText("Putting data into a list...")).toBeInTheDocument();
   })
 
   it("Screenshot Component - no initial data", async () => {
@@ -117,7 +115,7 @@ describe("Main Page", () => {
 
     fireEvent.click(viewButton);
 
-    expect(screen.getByTestId("weather")).toHaveTextContent("Please select a location");
+    expect(screen.getByTestId("weather")).toHaveTextContent("Weather Forecast ↓Waiting for locations to be generated");
   })
 
   it("Weather Component", async () => {
@@ -146,11 +144,10 @@ describe("Main Page", () => {
     }]
     
     render( <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />);
-
-    expect(screen.getByTestId("weather")).toHaveTextContent("Please select a location");
-
-    await waitFor(() => {
-      expect(screen.getByTestId("weather-details")).toBeInTheDocument();
-    });
+    expect(screen.getByTestId("weather-details")).toBeInTheDocument();
+    expect(screen.getByTestId("tab-list")).toBeInTheDocument();
+    expect(screen.getByTestId("forecast")).toBeInTheDocument();
+    expect(screen.getByTestId("dailyForecast")).toBeInTheDocument();
+    expect(screen.getByTestId("fourDayForecast")).toBeInTheDocument();
   })
 });
