@@ -73,7 +73,7 @@ describe("Main Page", () => {
     
     render(<Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />);
 
-    expect(screen.getByText("Please fill in the Date and Time, and Generate")).toBeInTheDocument();
+    expect(screen.getByText("Putting data into a list...")).toBeInTheDocument();
   })
 
   it("Screenshot Component - no initial data", async () => {
@@ -115,7 +115,7 @@ describe("Main Page", () => {
 
     fireEvent.click(viewButton);
 
-    expect(screen.getByTestId("weather")).toHaveTextContent("Please select a location");
+    expect(screen.getByTestId("weather")).toHaveTextContent("Weather Forecast ↓Waiting for locations to be generated");
   })
 
   it("Weather Component", async () => {
@@ -144,7 +144,10 @@ describe("Main Page", () => {
     }]
     
     render( <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />);
-
-    expect(screen.getByTestId("weather")).toHaveTextContent("Please select a location");
+    expect(screen.getByTestId("weather-details")).toBeInTheDocument();
+    expect(screen.getByTestId("tab-list")).toBeInTheDocument();
+    expect(screen.getByTestId("forecast")).toBeInTheDocument();
+    expect(screen.getByTestId("dailyForecast")).toBeInTheDocument();
+    expect(screen.getByTestId("fourDayForecast")).toBeInTheDocument();
   })
 });
