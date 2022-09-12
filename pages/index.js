@@ -12,6 +12,8 @@ export default function Home() {
   const [trafficData, setTrafficData] = useState([]);
   const [forecastData, setForecastData] = useState([]);
   const [areaData, setAreaData] = useState([]);
+  const [dailyForecast, setDailyForecast] = useState(null);
+  const [fourDayForecast, setFourDayForecast] = useState([]);
   const [dateTime, setDateTime] = useState('');
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
@@ -31,6 +33,22 @@ export default function Home() {
       .then(response => {
         setAreaData(response.data.area_metadata);
         setForecastData(response.data.items[0].forecasts);
+      })
+      .catch(error => {
+        errors.push(error.message);
+      })
+
+      axios.get('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast?date_time=' + dateTime)
+      .then(response => {
+        setDailyForecast(response.data.items[0].general.forecast);
+      })
+      .catch(error => {
+        errors.push(error.message);
+      })
+
+      axios.get('https://api.data.gov.sg/v1/environment/4-day-weather-forecast?date_time=' + dateTime)
+      .then(response => {
+        setFourDayForecast(response.data.items[0].forecasts);
       })
       .catch(error => {
         errors.push(error.message);
@@ -71,8 +89,8 @@ export default function Home() {
             <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} />
           </div>
           <div className={`${styles.card} ${styles.weather}`}>
-            <h2>Weather &darr;</h2>
-            <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} />
+            <h2>Weather Forecast &darr;</h2>
+            <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
           </div>
         </div>
 

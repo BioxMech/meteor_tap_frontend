@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
+import moment from 'moment';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
-const Weather = ({ geolocation, areaData, forecastData }) => {
+const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayForecast }) => {
 
   const [area, setArea] = useState(null);
   const [forecast, setForecast] = useState(null);
+  const [fourDayValues, setFourDayValues] = useState(null);
 
   const searchForecast = () => {
     // find the smallest difference of lat and lon
@@ -25,6 +31,12 @@ const Weather = ({ geolocation, areaData, forecastData }) => {
 
     setArea(area);
     setForecast(forecast);
+
+    let fourDayArr = []
+    for (let i = 0; i < fourDayForecast.length; i++) {
+      fourDayArr.push([moment(fourDayForecast[i].date).format("MMMM do, ddd"), fourDayForecast[i].forecast])
+    }
+    setFourDayValues(fourDayArr);
   }
 
   useEffect(() => {
@@ -33,17 +45,78 @@ const Weather = ({ geolocation, areaData, forecastData }) => {
     }
   }, [geolocation])
 
+  useEffect(() => {
+    setArea(null);
+    setForecast(null);
+  }, [areaData])
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <div data-testid="weather">
       {
-        areaData.length !== 0 ?
-        <div data-testid="weather-details">
-          Area: {area}
-          <br />
-          Forecast: {forecast}
-        </div>
+        areaData.length !== 0 && area !== null ?
+        <Box sx={{ width: '100%' }} data-testid="weather-details">
+          <Typography><b>Region:</b> {area}</Typography>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="2-Hour" {...a11yProps(0)} />
+              <Tab label="24-Hour" {...a11yProps(1)} />
+              <Tab label="4-day" {...a11yProps(2)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+            {forecast}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            {dailyForecast}
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            {
+              fourDayValues.map((day) => (
+                <div>
+                  {day[0]} : 
+                  <br />
+                  {day[1]}
+                  <hr />
+                </div>
+              ))
+            }
+          </TabPanel>
+        </Box>
         :
-        null
+        'Please select a location'
       }
     </div>
   )

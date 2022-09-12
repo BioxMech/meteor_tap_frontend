@@ -117,10 +117,10 @@ describe("Main Page", () => {
 
     fireEvent.click(viewButton);
 
-    expect(screen.getByTestId("weather")).toHaveTextContent("");
+    expect(screen.getByTestId("weather")).toHaveTextContent("Please select a location");
   })
 
-  it("Weather Component", () => {
+  it("Weather Component", async () => {
     const geolocation = {
       lat: 1.27414394350065,
       lon: 103.851316802547
@@ -139,10 +139,18 @@ describe("Main Page", () => {
         forecast: "Light shower"
       }
     ]
+    const dailyForecast = "Light Shower";
+    const fourDayForecast = [{
+      date: "2022-09-08",
+      forecast: "Pre-dawn light shower, after dawn raining"
+    }]
     
-    render( <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} />);
+    render( <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />);
 
-    expect(screen.getByTestId("weather-details")).toBeInTheDocument();
-    expect(screen.getByTestId("weather-details")).toHaveTextContent("Area: BedokForecast: Light shower");
+    expect(screen.getByTestId("weather")).toHaveTextContent("Please select a location");
+
+    await waitFor(() => {
+      expect(screen.getByTestId("weather-details")).toBeInTheDocument();
+    });
   })
 });
