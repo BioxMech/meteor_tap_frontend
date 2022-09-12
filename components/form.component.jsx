@@ -5,17 +5,17 @@ import Box from '@mui/material/Box';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Grid from '@mui/material/Grid';
 
-const Form = ({ setDateTime, loadingButton, setLoadingButton }) => {
+const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
 
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
 
   const checkForm = () => {
-    let dateTime = new moment(date + "T" + time).toISOString()
-    if (dateTime !== null) {
+    let dt = new moment(date + "T" + time).toISOString()
+    if (dt !== null) {
       setLoadingButton(true);
-      dateTime = dateTime.substring(0,19) + "Z"
-      setDateTime(dateTime);
+      dt = dt.substring(0,19) + "Z"
+      setDateTime(dt);
       return;
     }
 

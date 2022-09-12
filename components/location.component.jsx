@@ -82,6 +82,9 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
     setLocation([]);
     setEnded(false);
     setLoading(true);
+    setSelectedIndex(null);
+    setSS(null);
+    setGeolocation([]);
     loadMore();
   }, [trafficData])
 
@@ -108,32 +111,35 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
   }
 
   return (
-    <Grid item xs={12} sm={6} data-testid="location">
+    <Grid item xs={12} sm={8} data-testid="location">
       <Box className={`${styles.card}`}>
         <h2>Location &darr;</h2>
         {
-          trafficData.length !== 0 && !loading?
-            <Virtuoso
-              data-testid="list"
-              style={{ height: 200 }}
-              data={location}
-              endReached={loadMore}
-              overscan={100}
-              itemContent={(index, locationObject) => {
-                return (
-                  <ListItem key={index} component="div" disablePadding>
-                    <ListItemButton 
-                      selected={selectedIndex === index}
-                      onClick={(event) => handleListItemClick(event, index, locationObject.lat, locationObject.lon, locationObject.image)}
-                    >
-                      <ListItemText primary={locationObject.location} />
-                    </ListItemButton>
-                  </ListItem>
-                )
-                
-              }}
-              components={{ Footer }}
-            />
+          trafficData.length !== 0 ?
+            !loading ?
+              <Virtuoso
+                data-testid="list"
+                style={{ height: 200 }}
+                data={location}
+                endReached={loadMore}
+                overscan={100}
+                itemContent={(index, locationObject) => {
+                  return (
+                    <ListItem key={index} component="div" disablePadding>
+                      <ListItemButton 
+                        selected={selectedIndex === index}
+                        onClick={(event) => handleListItemClick(event, index, locationObject.lat, locationObject.lon, locationObject.image)}
+                      >
+                        <ListItemText primary={locationObject.location} />
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                  
+                }}
+                components={{ Footer }}
+              />
+            :
+            "Putting data into a list..."
           :
             "Please fill in the Date and Time, and Generate"
         }

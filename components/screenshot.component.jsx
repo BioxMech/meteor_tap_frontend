@@ -9,14 +9,18 @@ const Screenshot = ({ dateTime, ss }) => {
   return (
     <Grid item xs={12} data-testid="screenshot">
       <Box className={`${styles.card}`}>
-        <h2>Screenshot &darr;</h2>
+        <h2>Traffic Camera Screenshot &darr;</h2>
         <div>
           {
             dateTime.length !== 0 ?
               !ss ?
-                <Skeleton data-testid="skeleton" variant="rectangular" style={{ width: '100%' }} />
+                <>
+                  Please select a location above: 
+                  <hr />
+                  <Skeleton data-testid="skeleton" variant="rectangular" style={{ width: '100%' }} />
+                </>
               : <img  data-testid="ss-image" src={ss} style={{ width: '100%' }} />
-            : null
+            : "Waiting for locations to be generated"
           }
         </div>
       </Box>
