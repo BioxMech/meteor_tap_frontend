@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
 import styles from '../styles/Home.module.css'
-import Skeleton from '@mui/material/Skeleton';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Image from 'next/image'
 
 const Screenshot = ({ dateTime, ss }) => {
 
@@ -10,19 +9,17 @@ const Screenshot = ({ dateTime, ss }) => {
     <Grid item xs={12} data-testid="screenshot">
       <Box className={`${styles.card}`}>
         <h2>Traffic Camera Screenshot &darr;</h2>
-        <div>
+        
           {
             dateTime.length !== 0 ?
               !ss ?
                 <>
-                  Please select a location above: 
-                  <hr />
-                  <Skeleton data-testid="skeleton" variant="rectangular" style={{ width: '100%' }} />
+                  Please select a location
                 </>
-              : <img  data-testid="ss-image" src={ss} style={{ width: '100%' }} />
+              : <Image data-testid="ss-image" src={ss} alt="Camera Screenshot" width="100%" height="100%" layout="responsive" placeholder="blur" blurDataURL />
             : "Waiting for locations to be generated"
           }
-        </div>
+        
       </Box>
     </Grid>
   )

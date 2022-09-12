@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
+import font from '../styles/Font.module.css';
 import moment from 'moment';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -85,6 +86,12 @@ const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayFo
     setValue(newValue);
   };
 
+  const tabSx = {
+    "&.Mui-selected": {
+      color: "#5ccfe6"
+    }
+  }
+
   return (
     <Grid item xs={12} sm={4} data-testid="weather" >
       <Box className={`${styles.card}`}>
@@ -92,13 +99,15 @@ const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayFo
         {
           areaData.length !== 0  ?
             geolocation.length != 0 ?
-              <Box sx={{ width: '100%' }} data-testid="weather-details">
-                <Typography><b>Region:</b> {area}</Typography>
+              <Box sx={{ width: '100%' }} data-testid="weather-details" className={font.normal}>
+                <Typography variant="body1">
+                  <span className={font.bold}>Region:</span> {area}
+                </Typography>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs data-testid="tab-list" value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="2-Hour" {...a11yProps(0)} />
-                    <Tab label="24-Hour" {...a11yProps(1)} />
-                    <Tab label="4-day" {...a11yProps(2)} />
+                    <Tab label="2-Hour" {...a11yProps(0)} className={font.tabLabel} sx={tabSx} />
+                    <Tab label="24-Hour" {...a11yProps(1)} className={font.tabLabel} sx={tabSx} />
+                    <Tab label="4-day" {...a11yProps(2)} className={font.tabLabel} sx={tabSx} />
                   </Tabs>
                 </Box>
                 <TabPanel data-testid="forecast" value={value} index={0}>
@@ -109,8 +118,8 @@ const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayFo
                 </TabPanel>
                 <TabPanel data-testid="fourDayForecast" value={value} index={2}>
                   {
-                    fourDayValues.map((day) => (
-                      <div>
+                    fourDayValues.map((day, index) => (
+                      <div key={index}>
                         {day[0]} : 
                         <br />
                         {day[1]}

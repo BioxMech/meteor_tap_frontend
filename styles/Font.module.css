@@ -1,0 +1,81 @@
+.meteor {
+  color: #ef6b73;
+}
+
+.mainHeading {
+  color: #e6f1ff;
+}
+
+.normal {
+  color: #e6f1ff;
+}
+
+.title {
+  color: #5ccfe6;
+  font-size: clamp(1.5rem, 2.5vw, 4rem); 
+}
+
+.blinkGrey {
+  color: #8892b0;
+  animation: blinker 3s linear infinite;
+}
+
+.bold {
+  color: #ffae57;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.tabLabel {
+  color: #ccd6f6;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.rainbow {
+  animation: rainbow 2.5s linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rainbow{
+  100%,0%{
+    color: rgb(255,0,0);
+  }
+  8%{
+    color: rgb(255,127,0);
+  }
+  16%{
+    color: rgb(255,255,0);
+  }
+  25%{
+    color: rgb(127,255,0);
+  }
+  33%{
+    color: rgb(0,255,0);
+  }
+  41%{
+    color: rgb(0,255,127);
+  }
+  50%{
+    color: rgb(0,255,255);
+  }
+  58%{
+    color: rgb(0,127,255);
+  }
+  66%{
+    color: rgb(0,0,255);
+  }
+  75%{
+    color: rgb(127,0,255);
+  }
+  83%{
+    color: rgb(255,0,255);
+  }
+  91%{
+    color: rgb(255,0,127);
+  }
+}

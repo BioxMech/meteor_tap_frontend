@@ -116,16 +116,19 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
             !loading ?
               <Virtuoso
                 data-testid="list"
+                className={styles.list}
                 style={{ height: 200 }}
                 data={location}
                 endReached={loadMore}
                 overscan={100}
                 itemContent={(index, locationObject) => {
                   return (
-                    <ListItem key={index} component="div" disablePadding>
+                    <ListItem key={index} component="div" disablePadding className={styles.listItem}>
                       <ListItemButton 
                         selected={selectedIndex === index}
                         onClick={(event) => handleListItemClick(event, index, locationObject.lat, locationObject.lon, locationObject.image)}
+                        className={styles.listItemButton}
+                        disabled={selectedIndex === index ? true : false}
                       >
                         <ListItemText primary={locationObject.location} />
                       </ListItemButton>

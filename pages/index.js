@@ -1,12 +1,14 @@
-import Head from 'next/head'
+import Head from 'next/head';
 import axios from 'axios';
-import { useEffect, useState } from 'react'
-import Form from '../components/form.component'
-import Location from '../components/location.component'
-import Weather from '../components/weather.component'
-import Screenshot from '../components/screenshot.component'
-import styles from '../styles/Home.module.css'
+import { useEffect, useState } from 'react';
+import Form from '../components/form.component';
+import Location from '../components/location.component';
+import Weather from '../components/weather.component';
+import Screenshot from '../components/screenshot.component';
+import styles from '../styles/Home.module.css';
+import font from '../styles/Font.module.css';
 import Grid from '@mui/material/Grid';
+import ErrorMessage from '../components/errorMessage.component';
 
 export default function Home() {
 
@@ -19,6 +21,7 @@ export default function Home() {
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [errorMessageArr, setErrorMessageArr] = useState([]);
 
   useEffect(() => {
     if (dateTime.length !== 0) {
@@ -57,9 +60,10 @@ export default function Home() {
       })
 
       if (errors.length !== 0) {
+        setErrorMessageArr(errors);
         // failed to enter dateTime value
         // or API call failed
-        alert("Please alert the administrator for the following error:" + errors.join(' and '))
+        setLoadingButton(false);
       }
     }
   }, [dateTime])
@@ -74,21 +78,34 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Meteor Traffic/Weather Forecast! (by <a href="https://www.mom.gov.sg/">MoM</a>)
+        <h1 className={`${font.mainHeading}`}>
+          <span className={font.meteor}>Meteor:</span> Traffic/Weather Forecast!
         </h1>
 
-        <p className={styles.description}>
-          <code className={styles.code}>Developed by Jason</code>
+        <p>
+          <code className={font.rainbow}>Developed by Jason</code>
         </p>
 
-        <Form dateTime={dateTime} setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} />
+        <h1 className={font.title}>
+          Pick a date and time &rarr; <span className={font.blinkGrey}>Let the magic happen</span>
+        </h1>
+
+        <Form dateTime={dateTime} setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} setErrorMessageArr={setErrorMessageArr} />
         
         <Grid container spacing={2}>
           <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />
           <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
           <Screenshot dateTime={dateTime} ss={ss} />
         </Grid>
+
+        {
+          errorMessageArr.length > 0 ?
+            <ErrorMessage>
+              {`Error: ${errorMessageArr.join(' and ')}`}
+            </ErrorMessage>
+          :
+            null
+        }
       </main>
     </div>
   )

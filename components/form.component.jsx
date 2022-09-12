@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import moment from 'moment';
 import styles from '../styles/Home.module.css';
+import font from '../styles/Font.module.css';
 import Box from '@mui/material/Box';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Grid from '@mui/material/Grid';
+import CustomButton from './customButton.component';
 
-const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
+const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton, setErrorMessageArr }) => {
 
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
 
-  const checkForm = () => {
+  const handleClick = () => {
     let dt = new moment(date + "T" + time).toISOString()
     if (dt !== null) {
       setLoadingButton(true);
@@ -19,7 +20,7 @@ const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
       return;
     }
 
-    alert("Failed to input date/time")
+    setErrorMessageArr(["Failed to input date/time"])
   }
 
   return (
@@ -52,16 +53,7 @@ const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
       </Grid>
       <Grid item xs={12}>
         <Box component="div" sx={{ textAlign: 'center', margin: 0 }}>
-          <LoadingButton 
-            data-testid="view"
-            className={styles.formButton}
-            onClick={checkForm}
-            loading={loadingButton}
-            loadingIndicator="Fetching..."
-            variant="contained"
-          >
-            Generate
-          </LoadingButton>
+          <CustomButton handleClick={handleClick} loading={loadingButton} text={"Generate"} />
         </Box>
       </Grid>
     </Grid>
