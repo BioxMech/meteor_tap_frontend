@@ -24,8 +24,6 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
   };
 
   const loadMore = async () => {
-    console.log("LOADING MORE")
-
     const minStartIndex = Math.min(startIndex, trafficData.length - 1)
     const maxStopIndex = Math.min(stopIndex, trafficData.length)
     const arr = trafficData.slice(minStartIndex, maxStopIndex);
@@ -76,7 +74,6 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
   }
 
   useEffect(() => {
-    console.log("location component")
     setStartIndex(0);
     setStopIndex(5);
     setLocation([]);

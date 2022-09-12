@@ -11,7 +11,7 @@ const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayFo
 
   const [area, setArea] = useState(null);
   const [forecast, setForecast] = useState(null);
-  const [fourDayValues, setFourDayValues] = useState(null);
+  const [fourDayValues, setFourDayValues] = useState([]);
 
   const searchForecast = () => {
     // find the smallest difference of lat and lon
@@ -95,19 +95,19 @@ const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayFo
               <Box sx={{ width: '100%' }} data-testid="weather-details">
                 <Typography><b>Region:</b> {area}</Typography>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                  <Tabs data-testid="tab-list" value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="2-Hour" {...a11yProps(0)} />
                     <Tab label="24-Hour" {...a11yProps(1)} />
                     <Tab label="4-day" {...a11yProps(2)} />
                   </Tabs>
                 </Box>
-                <TabPanel value={value} index={0}>
+                <TabPanel data-testid="forecast" value={value} index={0}>
                   {forecast}
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel data-testid="dailyForecast" value={value} index={1}>
                   {dailyForecast}
                 </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel data-testid="fourDayForecast" value={value} index={2}>
                   {
                     fourDayValues.map((day) => (
                       <div>
