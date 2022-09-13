@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import CustomLoader from './customLoader.component';
 
-const Location = ({ dateTime, areaData, forecastData, setSS, trafficData, setGeolocation, setLoadingButton }) => {
+const Location = ({ areaData, forecastData, setSS, trafficData, setGeolocation, setLoadingButton }) => {
 
   const [location, setLocation] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
@@ -25,6 +25,17 @@ const Location = ({ dateTime, areaData, forecastData, setSS, trafficData, setGeo
   };
 
   const loadMore = async () => {
+    
+    let token = process.env.NEXT_PUBLIC_API_KEY; // OneMap api token
+
+    try { 
+      const response = await axios.post(window.location.protocol + "//" + window.location.host + '/api/token');
+      token = response.data.key;
+    } catch (e) {
+      alert("Please refresh the page if the page remains empty.")
+      return;
+    }
+
     const minStartIndex = Math.min(startIndex, trafficData.length - 1)
     const maxStopIndex = Math.min(stopIndex, trafficData.length)
     const arr = trafficData.slice(minStartIndex, maxStopIndex);
@@ -33,7 +44,7 @@ const Location = ({ dateTime, areaData, forecastData, setSS, trafficData, setGeo
       const result = await arr.reduce((prev, curr) => {
         return prev
           .then((acc) => 
-            axios.get('https://developers.onemap.sg/privateapi/commonsvc/revgeocode?location=' + curr.location.latitude + "," + curr.location.longitude + '&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjkyMTIsInVzZXJfaWQiOjkyMTIsImVtYWlsIjoidXNlZm9ydGhlcmFtQGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTY2MjYzMjcyMCwiZXhwIjoxNjYzMDY0NzIwLCJuYmYiOjE2NjI2MzI3MjAsImp0aSI6IjI3MDhiYzVjNjU0MTc1ZTVjY2Y0ZjQ5ZDU0NTJiZWJmIn0.zo5aotv55M1soStaRnjvww2SDAXxES2b0Tddz6fE8_I&buffer=10&addressType=All&otherFeatures=N')
+            axios.get('https://developers.onemap.sg/privateapi/commonsvc/revgeocode?location=' + curr.location.latitude + "," + curr.location.longitude + `&token=${token}&buffer=10&addressType=All&otherFeatures=N`)
               .then(response => {
                 if (response.data.GeocodeInfo.length !== 0) {
                   let total = 9999999;

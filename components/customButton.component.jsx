@@ -10,10 +10,10 @@ const CustomButton = (props) => {
       className={styles.button}
       onClick={props.handleClick}
       loading={props.loading}
-      disabled={props.disabled === null ? false : props.disabled}
+      disabled={props.disabled === undefined ? false : props.disabled}
       loadingIndicator={
         <span className={font.blinkGrey}>
-          "Fetching..."
+          Fetching...
         </span>
       }
       variant="outlined"
