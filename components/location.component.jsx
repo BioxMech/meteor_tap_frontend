@@ -32,7 +32,7 @@ const Location = ({ areaData, forecastData, setSS, trafficData, setGeolocation, 
       const response = await axios.post(window.location.protocol + "//" + window.location.host + '/api/token');
       token = response.data.key;
     } catch (e) {
-      alert("Please try again later.")
+      alert("Please refresh the page if the page remains empty.")
       return;
     }
 
