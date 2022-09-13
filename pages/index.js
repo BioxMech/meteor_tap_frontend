@@ -7,8 +7,10 @@ import Weather from '../components/weather.component';
 import Screenshot from '../components/screenshot.component';
 import styles from '../styles/Home.module.css';
 import font from '../styles/Font.module.css';
+import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import ErrorMessage from '../components/errorMessage.component';
+import CustomLoader from '../components/customLoader.component';
 
 export default function Home() {
 
@@ -22,6 +24,7 @@ export default function Home() {
   const [geolocation, setGeolocation] = useState([]);
   const [loadingButton, setLoadingButton] = useState(false);
   const [errorMessageArr, setErrorMessageArr] = useState([]);
+  const [gotErrors, setGotErrors] = useState(false);
 
   useEffect(() => {
     if (dateTime.length !== 0) {
@@ -61,6 +64,7 @@ export default function Home() {
 
       if (errors.length !== 0) {
         setErrorMessageArr(errors);
+        setGotErrors(true);
         // failed to enter dateTime value
         // or API call failed
         setLoadingButton(false);
@@ -74,39 +78,43 @@ export default function Home() {
         <title>Meteor</title>
         <meta name="description" content="Track Traffic and Weather Forecast" />
         <link rel="icon" href="/favicon.ico" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"></link>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={`${font.mainHeading}`}>
+      <Container maxWidth="lg" className={styles.main}>
+        <h1 data-testid="title" className={`${font.mainHeading}`}>
           <span className={font.meteor}>Meteor:</span> Traffic/Weather Forecast!
         </h1>
 
-        <p>
+        <p data-testid="author">
           <code className={font.rainbow}>Developed by Jason</code>
         </p>
 
-        <h1 className={font.title}>
+        <h1 data-testid="description" className={font.title}>
           Pick a date and time &rarr; <span className={font.blinkGrey}>Let the magic happen</span>
         </h1>
 
-        <Form dateTime={dateTime} setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} setErrorMessageArr={setErrorMessageArr} />
+        <Form dateTime={dateTime} setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} />
         
-        <Grid container spacing={2}>
-          <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />
-          <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
-          <Screenshot dateTime={dateTime} ss={ss} />
-        </Grid>
+        {
+          dateTime.length !== 0 ?
+            <Grid container spacing={2}>
+              <Location setSS={setSS} areaData={areaData} forecastData={forecastData} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />
+              <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
+              <Screenshot dateTime={dateTime} ss={ss} />
+            </Grid>
+          :
+            <CustomLoader >Waiting for the Date and Time...</CustomLoader>
+        }
 
         {
-          errorMessageArr.length > 0 ?
+          gotErrors ?
             <ErrorMessage>
               {`Error: ${errorMessageArr.join(' and ')}`}
             </ErrorMessage>
           :
             null
         }
-      </main>
+      </Container>
     </div>
   )
 }

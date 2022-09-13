@@ -8,15 +8,14 @@ const Screenshot = ({ dateTime, ss }) => {
   return (
     <Grid item xs={12} data-testid="screenshot">
       <Box className={`${styles.card}`}>
-        <h2>Traffic Camera Screenshot &darr;</h2>
-        
+        <h2>Screenshot &darr;</h2>
           {
             dateTime.length !== 0 ?
               !ss ?
                 <>
                   Please select a location
                 </>
-              : <Image data-testid="ss-image" src={ss} alt="Camera Screenshot" width="100%" height="100%" layout="responsive" placeholder="blur" blurDataURL />
+              : <img data-testid="ss-image" src={ss} alt="Camera Screenshot" style={{ width: '100%' }} />
             : "Waiting for locations to be generated"
           }
         

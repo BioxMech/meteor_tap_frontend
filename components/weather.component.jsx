@@ -95,7 +95,7 @@ const Weather = ({ geolocation, areaData, forecastData, dailyForecast, fourDayFo
   return (
     <Grid item xs={12} sm={4} data-testid="weather" >
       <Box className={`${styles.card}`}>
-        <h2>Weather Forecast &darr;</h2>
+        <h2>Weather &darr;</h2>
         {
           areaData.length !== 0  ?
             geolocation.length != 0 ?
