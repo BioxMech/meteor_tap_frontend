@@ -71,7 +71,9 @@ const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
       </LocalizationProvider>
       <Grid item xs={12}>
         <Box component="div" sx={{ textAlign: 'center', margin: 0 }}>
-          <CustomButton data-testid="view" handleClick={handleClick} loading={loadingButton} text={"Generate"} />
+          <CustomButton data-testid="view" handleClick={handleClick} loading={loadingButton} disabled={gotErrors}>
+            { gotErrors ? "Disabled" : "Generate" }
+          </CustomButton>
         </Box>
       </Grid>
         {

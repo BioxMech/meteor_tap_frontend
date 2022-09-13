@@ -111,6 +111,11 @@
   width: 100%;
 }
 
+.button:disabled {
+  background-color: #233554;
+  color: #a8b2d1;
+}
+
 .list {
   border: 1px solid #ccd6f673;
 }

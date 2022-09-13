@@ -8,6 +8,7 @@ import Screenshot from '../components/screenshot.component';
 import styles from '../styles/Home.module.css';
 import font from '../styles/Font.module.css';
 import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ErrorMessage from '../components/errorMessage.component';
 import CustomLoader from '../components/customLoader.component';
@@ -103,7 +104,9 @@ export default function Home() {
               <Screenshot dateTime={dateTime} ss={ss} />
             </Grid>
           :
-            <CustomLoader >Waiting for the Date and Time...</CustomLoader>
+            <Box sx={{ marginTop: '20px' }}>
+              <CustomLoader >Waiting for the Date and Time...</CustomLoader>
+            </Box>
         }
 
         {
