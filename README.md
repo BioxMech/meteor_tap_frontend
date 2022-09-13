@@ -1,41 +1,39 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Sneak Peek
+https://user-images.githubusercontent.com/70564653/189951880-d5e5b0cc-4272-49b6-922c-068cbfa5b0e3.mp4
 
-First, run the development server:
+# Key note
+- NextJS has a bug currently with MaterialUI, I had difficulty finding the source as it has plenty of different dependencies internally and from MUI, hence the <code>button</code> will look different on Production and Development environment
 
+# Live Deployment
+Deployed here [
+meteor-tap-frontend.vercel.app](
+meteor-tap-frontend.vercel.app)
+
+# Getting Started (Locally)
+1) In root folder, run <code>yarn install</code> in cli
+2) Run the follow command in cli to start the server
 ```bash
-npm run dev
-# or
 yarn dev
 ```
+3) Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Getting Started (Docker)
+1) In root folder, run <code>docker compose up --build</code> in cli
+- If encountered and error, run it one more time. It crashes sometimes due to the size of it.
+2) Once finish building, open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+# Assumptions
+- No using of paid services/api - including the once with limited requests/month as I assume that this application will be for production and lots of uses will be using it
+- Area location is sufficient + road name
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+# Interpretations
+- Locations to be as accurate as possible, hence using Singapore Government API (OneMap)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-
-## Jest
+## Side key notes
+### Jest
 As of jest 28, it no longer ships with jest-environment-jsdom
 
-## Moment library is used for backwards compatibility
+### Moment library is used for backwards compatibility
 IE 8 is unable to use the inbuilt Date function
