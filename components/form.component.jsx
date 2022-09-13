@@ -18,6 +18,10 @@ const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
   const [gotErrors, setGotErrors] = useState(false);
   const [errorMessageArr, setErrorMessageArr] = useState([]);
 
+  useEffect(() => {
+    setGotErrors(false);
+  }, [date, time])
+
   const isValid = (value) => {
     var momentDate = moment(value);
     return momentDate.isValid();
@@ -37,7 +41,6 @@ const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
       setDateTime(dt);
       return;
     }
-    
     setErrorMessageArr(["Failed to input date/time"]);
     setGotErrors(true);
     setLoadingButton(false);
@@ -72,7 +75,13 @@ const Form = ({ dateTime, setDateTime, loadingButton, setLoadingButton }) => {
       <Grid item xs={12}>
         <Box component="div" sx={{ textAlign: 'center', margin: 0 }}>
           <CustomButton data-testid="view" handleClick={handleClick} loading={loadingButton} disabled={gotErrors}>
-            { gotErrors ? "Disabled" : "Generate" }
+            { 
+              loadingButton ? 
+                null 
+              : gotErrors ? 
+                  "Disabled" 
+                : 
+                  "Generate" }
           </CustomButton>
         </Box>
       </Grid>
