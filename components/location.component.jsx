@@ -7,8 +7,9 @@ import ListItemText from '@mui/material/ListItemText';
 import { Virtuoso } from 'react-virtuoso';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import CustomLoader from './customLoader.component';
 
-const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButton }) => {
+const Location = ({ dateTime, areaData, forecastData, setSS, trafficData, setGeolocation, setLoadingButton }) => {
 
   const [location, setLocation] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
@@ -29,21 +30,33 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
     const arr = trafficData.slice(minStartIndex, maxStopIndex);
 
     if (arr.length !== 0) {
-      const result  = await arr.reduce((prev, curr) => {
+      const result = await arr.reduce((prev, curr) => {
         return prev
           .then((acc) => 
             axios.get('https://developers.onemap.sg/privateapi/commonsvc/revgeocode?location=' + curr.location.latitude + "," + curr.location.longitude + '&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjkyMTIsInVzZXJfaWQiOjkyMTIsImVtYWlsIjoidXNlZm9ydGhlcmFtQGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTY2MjYzMjcyMCwiZXhwIjoxNjYzMDY0NzIwLCJuYmYiOjE2NjI2MzI3MjAsImp0aSI6IjI3MDhiYzVjNjU0MTc1ZTVjY2Y0ZjQ5ZDU0NTJiZWJmIn0.zo5aotv55M1soStaRnjvww2SDAXxES2b0Tddz6fE8_I&buffer=10&addressType=All&otherFeatures=N')
               .then(response => {
                 if (response.data.GeocodeInfo.length !== 0) {
+                  let total = 9999999;
+                  let area = "";
+                  for (let i = 0; i < areaData.length; i++) {
+                    let currentLat = curr.location.latitude - areaData[i].label_location.latitude;
+                    let currentLon = curr.location.longitude - areaData[i].label_location.longitude;
+                    let currentTotal = Math.abs(currentLat) + Math.abs(currentLon);
+
+                    // to get the smallest difference for both latitude and longitude
+                    if (currentTotal < total) {
+                      total = currentTotal;
+                      area = forecastData[i].area;
+                    }
+                  }
                   return [...acc, {
-                    location: response.data.GeocodeInfo[0].ROAD,
+                    location: response.data.GeocodeInfo[0].ROAD === "NIL" ? "Other" : response.data.GeocodeInfo[0].ROAD + " " + `(${area})`,
                     lat: curr.location.latitude,
                     lon: curr.location.longitude,
                     image: curr.image
                   }]
                 }
                 setEnded(true);
-                
                 return [...acc];
               })
               .catch((error) => {
@@ -116,16 +129,19 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
             !loading ?
               <Virtuoso
                 data-testid="list"
+                className={styles.list}
                 style={{ height: 200 }}
                 data={location}
                 endReached={loadMore}
                 overscan={100}
                 itemContent={(index, locationObject) => {
                   return (
-                    <ListItem key={index} component="div" disablePadding>
+                    <ListItem key={index} component="div" disablePadding className={styles.listItem}>
                       <ListItemButton 
                         selected={selectedIndex === index}
                         onClick={(event) => handleListItemClick(event, index, locationObject.lat, locationObject.lon, locationObject.image)}
+                        className={styles.listItemButton}
+                        disabled={selectedIndex === index ? true : false}
                       >
                         <ListItemText primary={locationObject.location} />
                       </ListItemButton>
@@ -136,7 +152,7 @@ const Location = ({ dateTime, setSS, trafficData, setGeolocation, setLoadingButt
                 components={{ Footer }}
               />
             :
-            "Putting data into a list..."
+            <CustomLoader type="search">Putting data into a list...</CustomLoader>
           :
             "Please fill in the Date and Time, and Generate"
         }

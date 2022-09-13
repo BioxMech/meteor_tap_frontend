@@ -1,12 +1,17 @@
-import Head from 'next/head'
+import Head from 'next/head';
 import axios from 'axios';
-import { useEffect, useState } from 'react'
-import Form from '../components/form.component'
-import Location from '../components/location.component'
-import Weather from '../components/weather.component'
-import Screenshot from '../components/screenshot.component'
-import styles from '../styles/Home.module.css'
+import { useEffect, useState } from 'react';
+import Form from '../components/form.component';
+import Location from '../components/location.component';
+import Weather from '../components/weather.component';
+import Screenshot from '../components/screenshot.component';
+import styles from '../styles/Home.module.css';
+import font from '../styles/Font.module.css';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import ErrorMessage from '../components/errorMessage.component';
+import CustomLoader from '../components/customLoader.component';
 
 export default function Home() {
 
@@ -19,6 +24,8 @@ export default function Home() {
   const [ss, setSS] = useState(null);
   const [geolocation, setGeolocation] = useState([]);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [errorMessageArr, setErrorMessageArr] = useState([]);
+  const [gotErrors, setGotErrors] = useState(false);
 
   useEffect(() => {
     if (dateTime.length !== 0) {
@@ -57,9 +64,11 @@ export default function Home() {
       })
 
       if (errors.length !== 0) {
+        setErrorMessageArr(errors);
+        setGotErrors(true);
         // failed to enter dateTime value
         // or API call failed
-        alert("Please alert the administrator for the following error:" + errors.join(' and '))
+        setLoadingButton(false);
       }
     }
   }, [dateTime])
@@ -70,26 +79,45 @@ export default function Home() {
         <title>Meteor</title>
         <meta name="description" content="Track Traffic and Weather Forecast" />
         <link rel="icon" href="/favicon.ico" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"></link>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Meteor Traffic/Weather Forecast! (by <a href="https://www.mom.gov.sg/">MoM</a>)
+      <Container maxWidth="lg" className={styles.main}>
+        <h1 data-testid="title" className={`${font.mainHeading}`}>
+          <span className={font.meteor}>Meteor:</span> Traffic/Weather Forecast!
         </h1>
 
-        <p className={styles.description}>
-          <code className={styles.code}>Developed by Jason</code>
+        <p data-testid="author">
+          <code className={font.rainbow}>Developed by Jason</code>
         </p>
+
+        <h1 data-testid="description" className={font.title}>
+          Pick a date and time &rarr; <span className={font.blinkGrey}>Let the magic happen</span>
+        </h1>
 
         <Form dateTime={dateTime} setDateTime={setDateTime} loadingButton={loadingButton} setLoadingButton={setLoadingButton} />
         
-        <Grid container spacing={2}>
-          <Location setSS={setSS} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />
-          <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
-          <Screenshot dateTime={dateTime} ss={ss} />
-        </Grid>
-      </main>
+        {
+          dateTime.length !== 0 ?
+            <Grid container spacing={2}>
+              <Location setSS={setSS} areaData={areaData} forecastData={forecastData} trafficData={trafficData} setGeolocation={setGeolocation} setLoadingButton={setLoadingButton} />
+              <Weather geolocation={geolocation} areaData={areaData} forecastData={forecastData} dailyForecast={dailyForecast} fourDayForecast={fourDayForecast} />
+              <Screenshot dateTime={dateTime} ss={ss} />
+            </Grid>
+          :
+            <Box sx={{ marginTop: '20px' }}>
+              <CustomLoader >Waiting for the Date and Time...</CustomLoader>
+            </Box>
+        }
+
+        {
+          gotErrors ?
+            <ErrorMessage>
+              {`Error: ${errorMessageArr.join(' and ')}`}
+            </ErrorMessage>
+          :
+            null
+        }
+      </Container>
     </div>
   )
 }
