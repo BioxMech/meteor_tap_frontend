@@ -8,11 +8,8 @@ import { Virtuoso } from 'react-virtuoso';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import CustomLoader from './customLoader.component';
-import { usePromiseTracker } from "react-promise-tracker";
 
 const Location = ({ dateTime, areaData, forecastData, setSS, trafficData, setGeolocation, setLoadingButton }) => {
-
-  const { promiseInProgress } = usePromiseTracker();
 
   const [location, setLocation] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
