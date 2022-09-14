@@ -5,6 +5,15 @@ https://user-images.githubusercontent.com/70564653/189951880-d5e5b0cc-4272-49b6-
 
 # Key note
 - NextJS has a bug currently with MaterialUI, I had difficulty finding the source as it has plenty of different dependencies internally and from MUI, hence the <code>button</code> will look different on Production and Development environment
+- API_TOKEN is obtained from here: [https://www.onemap.gov.sg/docs/#authentication-service-post](https://www.onemap.gov.sg/docs/#authentication-service-post) using the email and password from the environment file
+-- Replace if needed by doing a <b style="color: lightgreen">POST</b> request to <code>https://developers.onemap.sg/privateapi/auth/post/getToken</code> with a JSON body of 
+```json
+{
+  "email": NEXT_PUBLIC_EMAIL,
+  "password": NEXT_PUBLIC_PASSWORD
+}
+```
+- Environment file is pushed to the repo only for the purpose of being able to run the application without any additional configuration on your side
 
 # Live Deployment
 Deployed here [
