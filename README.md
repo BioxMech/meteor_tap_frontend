@@ -16,9 +16,7 @@ https://user-images.githubusercontent.com/70564653/189951880-d5e5b0cc-4272-49b6-
 - Environment file is pushed to the repo only for the purpose of being able to run the application without any additional configuration on your side
 
 # Live Deployment
-Deployed here [
-meteor-tap-frontend.vercel.app](
-meteor-tap-frontend.vercel.app)
+Website: <a href="https://meteor-tap-frontend.vercel.app/" target="_blank">https://meteor-tap-frontend.vercel.app/</href>
 
 # Getting Started (Locally)
 1) In root folder, run <code>yarn install</code> in cli
